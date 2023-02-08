@@ -10,8 +10,6 @@ export const Home = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
 
-    console.log(products.length)
-
 
     const fetchProducts = async () => {
         setLoading(true)
@@ -21,9 +19,7 @@ export const Home = () => {
                  setProducts(res.data)   
             }).catch((e) => console.log(e))
             .finally(() => {
-                setTimeout(() => {
                     setLoading(false)
-                }, 2000)
             })
     }
         

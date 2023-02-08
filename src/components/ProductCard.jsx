@@ -1,14 +1,23 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const ProductCard = ({product}) => {
+    const navigate = useNavigate()
+
+    const goToProduct = () => {
+       navigate("/products/" + product.slug )
+    } 
   return (
     <div
     className="w-64 h-75 bg-transparent overflow-hidden shadow-md shadow-black group cursor-pointer transition duration-200 ease-in transform z-1 sm:hover:scale-105">
    <img
+    onClick={goToProduct}
     className="w-full h-48 object-cover" src={product.image} alt={product.name} />
    <div
     className="px-6 py-4">
-       <div className="font-bold text-xl mb-2 transition-all duration-100 ease-in-out group-hover:text-pink-700">{product.title}</div>
+       <div
+         onClick={goToProduct}
+        className="font-bold text-xl mb-2 transition-all duration-100 ease-in-out group-hover:text-pink-700">{product.title}</div>
    </div>
    <div className="px-6 py-4 flex items-center justify-between">
    <p className="text-2xl">{product.price}$</p>

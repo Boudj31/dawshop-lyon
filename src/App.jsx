@@ -12,6 +12,7 @@ import {
     Route
   } from 'react-router-dom'
 import { NotFound } from './pages/NotFound'
+import ProductDetails from './pages/ProductDetails'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/products' element={<Products />} />
+          <Route path='/products/:slug' element={<ProductDetails />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
