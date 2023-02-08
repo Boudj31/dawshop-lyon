@@ -1,16 +1,30 @@
 import axios from "axios"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import Loading from "../components/Loading"
+import ProductCard from "../components/ProductCard"
 import Separateur from "../components/Separateur"
 
 export const Home = () => {
 
+    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    console.log(products.length)
+
+
     const fetchProducts = async () => {
+        setLoading(true)
        await axios.get("http://localhost:3000/products")
              .then((res) => 
              { 
-                console.log(res.data);    
+                 setProducts(res.data)   
             }).catch((e) => console.log(e))
+            .finally(() => {
+                setTimeout(() => {
+                    setLoading(false)
+                }, 2000)
+            })
     }
         
     
@@ -60,11 +74,15 @@ export const Home = () => {
                 <p>Profiter des meilleurs avant ruptures</p>
             </div>
             {/* CARDPRODUCT */}
+            <div className="mt-10 mb-20 gap-7 sm:grid md:grid-cols-2 xl:grid-cols-4">
+            { products.length  && !loading ? products.slice(-4).map((p) => (
+                <ProductCard key={p.id} product={p} />
+            )) : <Loading />}
 
-            {/* Afficher 4 cartes de produits
-            Les 4 derniers ? 
-            mettre un temps de chargement de 2s avant de les faire 
-            apparaitre */}
+            </div>
+
+
+
                 
     
         </section>
