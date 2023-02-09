@@ -1,0 +1,1 @@
+export const getIsCartActive = (state) => state.cart.isCartActive

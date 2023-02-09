@@ -1,41 +1,32 @@
-import axios from 'axios'
+
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import {useParams } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import Loading from '../components/Loading'
+import { fetchProductAsync } from "../store/actions/productActions"
+import { getError, getLoading, getProducts } from "../store/selectors/productSelector"
+
 
 const ProductDetails = () => {
-    const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
+    const dispatch = useDispatch()
+
+    const loading = useSelector(getLoading);
+    const error = useSelector(getError);
+    const products = useSelector(getProducts);
     const params = useParams()
  
-
-
-
-    const fetchProducts = async () => {
-        setLoading(true)
-       await axios.get("http://localhost:3000/products")
-             .then((res) => 
-             { 
-                 setProducts(res.data)   
-            }).catch((e) => setError(e.message))
-            .finally(() => {
-                    setLoading(false)
-            })
-    }
-
     const currentProduct = products.find((p) => p.slug === params.slug)
         
     
     useEffect(() => {
-
-     fetchProducts()
-
+    dispatch(fetchProductAsync())
     }, [])
 
   return (
     <main className='container mx-auto'>
+
+        {error && <p>{error}</p>}
             {
                 currentProduct && !loading ?
                     <>

@@ -1,16 +1,21 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
+import { fetchProductAsync } from "../store/actions/productActions"
+import { getError, getLoading, getProducts } from "../store/selectors/productSelector"
 
 export const Products = () => {
-  const API_URL = "http://localhost:3000/products"
 
-  const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
-  const [loading, setLoading] = useState(false)
+
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("Tout")
+  const dispatch = useDispatch()
+
+  const loading = useSelector(getLoading);
+  const error = useSelector(getError);
+  const products = useSelector(getProducts);
 
 
   const resetFilter = () => {
@@ -20,19 +25,9 @@ export const Products = () => {
 
 
 
-  const fetchProducts = async () => {
-      setLoading(true)
-     await axios.get(API_URL)
-           .then((res) => 
-           { 
-               setProducts(res.data)   
-          }).catch((e) => console.log(e))
-          .finally(() => {
-                  setLoading(false)
-          })
-  }
+ 
   useEffect(() => {
-    fetchProducts()
+    dispatch(fetchProductAsync())
    }, [])
 
    useEffect(() => {
@@ -115,9 +110,16 @@ export const Products = () => {
 
               {/* LISTE DES PRODUITS */}
               <div className="mt-10 mb-20 gap-7 sm:grid md:grid-cols-2 xl:grid-cols-4">
-            { products.length  && !loading ? filteredProducts.map((p) => (
+            { products.length && !error ? filteredProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
-            )) : <Loading />}
+            )) :
+                <div className="flex justify-center">
+                 <p className="bg-red-400 p-3">{error}</p> 
+                </div>
+            
+             }
+
+            {loading && <Loading />}
 
             </div>
 

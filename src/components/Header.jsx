@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import useWindowSize from '../hooks/useWindowSize'
+import { getIsCartActive } from '../store/selectors/cartSelector'
 import { DesktopMenu } from './DesktopMenu'
 import HeaderItem from './HeaderItem'
 import CloseMenu from './Icons/CloseMenu'
@@ -12,6 +14,7 @@ const Header = ({title = "Dawshop"}) => {
     const navigate = useNavigate()
     const size = useWindowSize()
     const [isOpen, setIsOpen] = useState(false)
+    const isCartOpen = useSelector(getIsCartActive)
 
     const toogleMenu = () => {
       setIsOpen(!isOpen)
@@ -38,6 +41,8 @@ const Header = ({title = "Dawshop"}) => {
       height={40} />
       <h3 className='text-xl font-bold'>{title}</h3>
     </div>
+
+    {isCartOpen && <p>Panier ouvert</p>}
 
     {/* LIENS */}
 

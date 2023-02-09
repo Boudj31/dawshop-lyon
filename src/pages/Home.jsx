@@ -5,33 +5,21 @@ import { Link } from "react-router-dom"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
 import Separateur from "../components/Separateur"
-import { requestBegin, requestEchec, requestSuccess } from "../store/actions/productActions"
+import { fetchProductAsync, requestBegin, requestEchec, requestSuccess } from "../store/actions/productActions"
+import { getError, getLoading, getProducts } from "../store/selectors/productSelector"
 
 export const Home = () => {
 
     const dispatch = useDispatch()
-    const loading = useSelector((state) => state.product.loading);
-    const error = useSelector((state) => state.product.error);
-    const products = useSelector((state) => state.product.products);
+
+    const loading = useSelector(getLoading);
+    const error = useSelector(getError);
+    const products = useSelector(getProducts);
  
 
-
-
-    const fetchProducts = async () => {
-        dispatch(requestBegin())
-       await axios.get("http://localhost:3000/products")
-             .then((res) => 
-             { 
-                dispatch(requestSuccess(res.data)) 
-            }).catch((e) =>dispatch(requestEchec(e.message)))
-         
-    }
-        
     
     useEffect(() => {
-        fetchProducts()
-  
-
+        dispatch(fetchProductAsync())
     }, [])
 
 
@@ -75,9 +63,14 @@ export const Home = () => {
             </div>
             {/* CARDPRODUCT */}
             <div className="mt-10 mb-20 gap-7 sm:grid md:grid-cols-2 xl:grid-cols-4">
-            { products.length  && error != '' ? products.slice(-4).map((p) => (
+            { products.length && !error ? products.slice(-4).map((p) => (
                 <ProductCard key={p.id} product={p} />
-            )) : <p>{error}</p> }
+            )) :
+                <div className="flex justify-center">
+                 <p className="bg-red-400 p-3">{error}</p> 
+                </div>
+            
+             }
 
             {loading && <Loading />}
 
