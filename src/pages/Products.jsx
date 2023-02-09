@@ -58,7 +58,7 @@ export const Products = () => {
      
      setFilteredProducts(result)
 
-   }, [search, category])
+   }, [products, search, category])
 
     return (
 
