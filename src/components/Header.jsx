@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useWindowSize from '../hooks/useWindowSize'
+import { DesktopMenu } from './DesktopMenu'
 import HeaderItem from './HeaderItem'
+import CloseMenu from './Icons/CloseMenu'
+import OpenMenu from './Icons/OpenMenu'
+import { MobileMenu } from './MobileMenu'
 
 const Header = ({title = "Dawshop"}) => {
 
     const navigate = useNavigate()
+    const size = useWindowSize()
+    const [isOpen, setIsOpen] = useState(false)
+
+    const toogleMenu = () => {
+      setIsOpen(!isOpen)
+    }
 
     const links = [
         {path : "/", title: "Accueil"},
@@ -30,16 +41,14 @@ const Header = ({title = "Dawshop"}) => {
 
     {/* LIENS */}
 
-    <nav>
-      <ul className='flex justify-between gap-10'>
-          {links.map(({title, path}) => (
-              <HeaderItem key={title} path={path} title={title} />
-          ))}
-        <li className='font-bold cursor-pointer'>
-          <a href="">Panier</a>
-        </li>
-      </ul>
-    </nav>
+{  size.width > 900 ? 
+<DesktopMenu links={links} /> :
+ !isOpen ? <OpenMenu toogleMenu={toogleMenu} />
+  :
+   <CloseMenu toogleMenu={toogleMenu} />}
+
+   {isOpen && <MobileMenu links={links} />}
+  
     </div>
 
   </header>

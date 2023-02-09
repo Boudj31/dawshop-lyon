@@ -37,7 +37,7 @@ export const Home = () => {
         <section className="lg:flex block gap-5 my-44 container mx-auto">
             <div className="lg:w-1/2 w-full flex flex-col justify-between">
                 <div>
-                    <h1 className="text-7xl font-bold mb-5">Des <span className="text-pink-700" >produits</span> rares et exclusifs à portée de clic !</h1>
+                    <h1 className="text-2xl lg:text-7xl font-bold mb-5">Des <span className="text-pink-700" >produits</span> rares et exclusifs à portée de clic !</h1>
                     <p className="text-lg">Notre sélection de produits gaming rares et difficiles à trouver ailleurs vous propose les dernières innovations et tendances du monde du jeu vidéo. Chaque article a été soigneusement choisi pour vous offrir une expérience de jeu unique et immersive.</p>
     
                 </div>
