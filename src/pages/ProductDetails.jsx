@@ -7,6 +7,7 @@ import Loading from '../components/Loading'
 const ProductDetails = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const params = useParams()
  
 
@@ -18,7 +19,7 @@ const ProductDetails = () => {
              .then((res) => 
              { 
                  setProducts(res.data)   
-            }).catch((e) => console.log(e))
+            }).catch((e) => setError(e.message))
             .finally(() => {
                     setLoading(false)
             })

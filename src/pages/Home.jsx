@@ -1,32 +1,36 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
 import Separateur from "../components/Separateur"
+import { requestBegin, requestEchec, requestSuccess } from "../store/actions/productActions"
 
 export const Home = () => {
 
-    const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
+    const loading = useSelector((state) => state.product.loading);
+    const error = useSelector((state) => state.product.error);
+    const products = useSelector((state) => state.product.products);
+ 
+
 
 
     const fetchProducts = async () => {
-        setLoading(true)
+        dispatch(requestBegin())
        await axios.get("http://localhost:3000/products")
              .then((res) => 
              { 
-                 setProducts(res.data)   
-            }).catch((e) => console.log(e))
-            .finally(() => {
-                    setLoading(false)
-            })
+                dispatch(requestSuccess(res.data)) 
+            }).catch((e) =>dispatch(requestEchec(e.message)))
+         
     }
         
     
     useEffect(() => {
-
-     fetchProducts()
+        fetchProducts()
+  
 
     }, [])
 
@@ -37,7 +41,7 @@ export const Home = () => {
         <section className="lg:flex block gap-5 my-44 container mx-auto">
             <div className="lg:w-1/2 w-full flex flex-col justify-between">
                 <div>
-                    <h1 className="text-2xl lg:text-7xl font-bold mb-5">Des <span className="text-pink-700" >produits</span> rares et exclusifs à portée de clic !</h1>
+                    <h1 className="text-4xl lg:text-7xl font-bold mb-5">Des <span className="text-pink-700" >produits</span> rares et exclusifs à portée de clic !</h1>
                     <p className="text-lg">Notre sélection de produits gaming rares et difficiles à trouver ailleurs vous propose les dernières innovations et tendances du monde du jeu vidéo. Chaque article a été soigneusement choisi pour vous offrir une expérience de jeu unique et immersive.</p>
     
                 </div>
@@ -71,9 +75,11 @@ export const Home = () => {
             </div>
             {/* CARDPRODUCT */}
             <div className="mt-10 mb-20 gap-7 sm:grid md:grid-cols-2 xl:grid-cols-4">
-            { products.length  && !loading ? products.slice(-4).map((p) => (
+            { products.length  && error != '' ? products.slice(-4).map((p) => (
                 <ProductCard key={p.id} product={p} />
-            )) : <Loading />}
+            )) : <p>{error}</p> }
+
+            {loading && <Loading />}
 
             </div>
 
