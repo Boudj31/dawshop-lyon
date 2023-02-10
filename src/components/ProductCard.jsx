@@ -1,8 +1,16 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { addProductToCart } from '../store/actions/cartActions'
 
 const ProductCard = ({product}) => {
     const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+
+    const addProduct = () => {
+        dispatch(addProductToCart(product))
+    } 
 
     const goToProduct = () => {
        navigate("/products/" + product.slug )
@@ -22,6 +30,7 @@ const ProductCard = ({product}) => {
    <div className="px-6 py-4 flex items-center justify-between">
    <p className="text-2xl">{product.price}$</p>
        <button
+       onClick={addProduct}
        className="bg-pink-50 text-pink-700 shadow-sm shadow-black hover:bg-pink-300 hover:text-gray-900 font-bold py-2 px-4">
            +
        </button>

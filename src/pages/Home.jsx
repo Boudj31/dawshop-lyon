@@ -17,7 +17,7 @@ export const Home = () => {
     const products = useSelector(getProducts);
  
 
-    
+
     useEffect(() => {
         dispatch(fetchProductAsync())
     }, [])

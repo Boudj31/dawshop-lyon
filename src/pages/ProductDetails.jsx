@@ -4,12 +4,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import {useParams } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import Loading from '../components/Loading'
+import { addProductToCart } from '../store/actions/cartActions'
 import { fetchProductAsync } from "../store/actions/productActions"
 import { getError, getLoading, getProducts } from "../store/selectors/productSelector"
 
 
 const ProductDetails = () => {
     const dispatch = useDispatch()
+
+    const addProduct = () => {
+        dispatch(addProductToCart(currentProduct))
+    } 
 
     const loading = useSelector(getLoading);
     const error = useSelector(getError);
@@ -57,6 +62,7 @@ const ProductDetails = () => {
                                 <div className='flex justify-between'>
                                     <p className="text-6xl font-bold">{currentProduct.price} <span className='text-pink-700'>$</span></p>
                                     <button
+                                    onClick={addProduct}
     
                                         className='py-2 px-6 bg-pink-700 text-pink-50 shadow-sm shadow-black hover:bg-pink-300 hover:text-gray-900'
                                     >+</button>

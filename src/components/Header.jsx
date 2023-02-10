@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import useWindowSize from '../hooks/useWindowSize'
-import { getIsCartActive } from '../store/selectors/cartSelector'
+import { toggleCart } from '../store/actions/cartActions'
+import { getCountCart, getIsCartActive } from '../store/selectors/cartSelector'
+import Cart from './Cart'
 import { DesktopMenu } from './DesktopMenu'
-import HeaderItem from './HeaderItem'
 import CloseMenu from './Icons/CloseMenu'
 import OpenMenu from './Icons/OpenMenu'
 import { MobileMenu } from './MobileMenu'
@@ -15,6 +16,12 @@ const Header = ({title = "Dawshop"}) => {
     const size = useWindowSize()
     const [isOpen, setIsOpen] = useState(false)
     const isCartOpen = useSelector(getIsCartActive)
+
+    const dispatch = useDispatch();
+    const countItems = useSelector(getCountCart)
+    const toogleCartWithReducer = () => {
+        dispatch(toggleCart())
+    }
 
     const toogleMenu = () => {
       setIsOpen(!isOpen)
@@ -29,8 +36,8 @@ const Header = ({title = "Dawshop"}) => {
   return (
     <header className='flex justify-between items-center'>
     {/* LOGO */}
-    <div className='container mx-auto justify-between py-5 flex items-center'>
-
+    <div className='container relative mx-auto justify-between py-5 flex items-center'>
+    <Cart isCartActive={isCartOpen}/>
         <div
         onClick={() => navigate('/')}
          className='flex gap-3 items-center'>
@@ -42,17 +49,25 @@ const Header = ({title = "Dawshop"}) => {
       <h3 className='text-xl font-bold'>{title}</h3>
     </div>
 
-    {isCartOpen && <p>Panier ouvert</p>}
 
     {/* LIENS */}
 
 {  size.width > 900 ? 
-<DesktopMenu links={links} /> :
+<DesktopMenu
+ links={links}
+ toogleCartWithReducer={toogleCartWithReducer}
+ countItems={countItems}
+  /> :
  !isOpen ? <OpenMenu toogleMenu={toogleMenu} />
   :
    <CloseMenu toogleMenu={toogleMenu} />}
 
-   {isOpen && <MobileMenu links={links} />}
+   {isOpen &&
+    <MobileMenu 
+    links={links}
+    toogleCartWithReducer={toogleCartWithReducer}
+    countItems={countItems}
+   />}
   
     </div>
 
